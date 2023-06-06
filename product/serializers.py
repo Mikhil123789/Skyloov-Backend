@@ -26,3 +26,8 @@ class ProductSearchSerializer(serializers.Serializer):
             raise serializers.ValidationError("max_price must be greater than or equal to min_price")
 
         return data
+
+class ProductImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Products
+        fields = ('image',)

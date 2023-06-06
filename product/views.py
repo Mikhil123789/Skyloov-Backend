@@ -1,15 +1,57 @@
+import threading
 from django.shortcuts import render
 from django.db.models import Q
+from rest_framework.decorators import api_view
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from drf_spectacular.utils import extend_schema
 from product.models import Products
-from .serializers import ProductSerializer, ProductSearchSerializer
+from .serializers import ProductSerializer, ProductSearchSerializer, ProductImageSerializer
 from rest_framework import status
-# Create your views here.
+from PIL import Image
+
 from .utils import get_products_filter
+
+
+
+@api_view(['POST'])
+def update_product_image(request, product_id):
+    try:
+        product = Products.objects.get(pk=product_id)
+    except Products.DoesNotExist:
+        return Response({'error': 'Product does not exist.'}, status=status.HTTP_404_NOT_FOUND)
+
+    serializer = ProductImageSerializer(data=request.data)
+    if serializer.is_valid():
+        
+        image = serializer.validated_data['image']
+        # print(image)
+        # import pdb; pdb.set_trace()
+        def process_image():
+            # Save original image
+            product.image = image
+            product.save()
+
+        # # Generate and save thumbnail
+        # thumbnail_size = (1000, 1000)  # Customize the size according to your needs
+        # thumbnail = Image.open(image)
+        # thumbnail.thumbnail(thumbnail_size)
+        # thumbnail_path = f"thumbnails/{product_id}.jpg"  # Customize the path to save the thumbnail
+        # thumbnail.save(thumbnail_path)
+
+        # # Generate and save full-size image
+        # full_size_image_path = f"full_size_images/{product_id}.jpg"  # Customize the path to save the full-size image
+        # full_size_image = Image.open(image)
+        # full_size_image.save(full_size_image_path)
+
+        thread = threading.Thread(target=process_image)
+        thread.start()
+
+        return Response({"message": "Product Image Uploaded Successfully."}, status=status.HTTP_200_OK)
+
+    return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
 
@@ -80,3 +122,6 @@ class ProductFilterView(APIView, PageNumberPagination):
                 'error': str(e)
             }
             return Response(response_data, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        
+
+

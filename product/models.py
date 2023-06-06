@@ -50,6 +50,7 @@ class Products(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     quantity = models.IntegerField()
     rating = models.FloatField(default=5)
+    image = models.ImageField(upload_to='static/product_images/', null=True, blank=True)  # New field for product images
     created_at = models.DateTimeField(auto_now_add=True)
     class Meta:
         db_table = "sk_products"
