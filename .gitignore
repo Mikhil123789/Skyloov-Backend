@@ -1,1 +1,8 @@
-schema.yml
+# Byte-compiled / optimized / DLL files
+__pycache__/
+__pycache__/*
+*.py[cod]
+*.vscode
+# C extensions
+*.so
+*.pyc

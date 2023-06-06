@@ -13,8 +13,8 @@ class Cart(models.Model):
     user = models.OneToOneField(
         User, related_name="user_cart", on_delete=models.CASCADE
     )
-    created = models.DateTimeField(db_index=True, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(db_index=True, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
 @receiver(post_save, sender=User)
 def create_user_cart(sender, created, instance, *args, **kwargs):
@@ -29,8 +29,8 @@ class CartItem(models.Model):
         Products, related_name="cart_product", on_delete=models.CASCADE
     )
     quantity = models.IntegerField(default=1)
-    created = models.DateTimeField(db_index=True, auto_now_add=True)
-    updated = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(db_index=True, auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
 
     class Meta:
         unique_together = (("cart", "product"),)
