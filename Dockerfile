@@ -1,13 +1,19 @@
 # Start with the Python 3.9 image
 FROM python:3.9
 
-# Set the working directory to /app
+ENV PYTHONDONTWRITEBYTECODE=1 
+ENV PYTHONUNBUFFERED=1
+
+##Setup python environments.
 WORKDIR /app
+RUN pip install -U pip
+ADD ./requirements.txt /app/requirements.txt
+RUN  pip install -r /app/requirements.txt 
 
-COPY requirements.txt requirements.txt
 
-RUN pip install -r requirements.txt
+ADD . /app
+RUN chmod 775 -R /app
 
-COPY . .
+EXPOSE 8800
 
 ENTRYPOINT ["/bin/sh", "/app/run.sh"]
