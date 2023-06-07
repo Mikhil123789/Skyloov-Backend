@@ -1,12 +1,29 @@
 from rest_framework import serializers
 from . import models
 
+class BrandSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Brands
+        fields = "__all__"
+class CategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = models.Category
+        fields = "__all__"
+
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    brand = BrandSerializer()
+    category = CategorySerializer()
+    # image_url = serializers.Chara()
     class Meta:
         model = models.Products
-        fields = "__all__"
+        fields = ['id', 'name', 'price', 'description','brand','category', 'image']
+    # def get_image_url(self, obj):
+    #     if obj.image:
+    #         return self.context['request'].build_absolute_uri(obj.image.url)
+    #     return None
+
  
 
 class ProductSearchSerializer(serializers.Serializer):

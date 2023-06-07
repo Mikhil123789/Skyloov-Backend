@@ -16,7 +16,7 @@ from datetime import timedelta
 #Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
+BASE_URL = ""
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.0/howto/deployment/checklist/
 
@@ -62,7 +62,7 @@ ROOT_URLCONF = 'Skyloov.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'static')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -103,10 +103,15 @@ WSGI_APPLICATION = 'Skyloov.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',  
+        'NAME': 'SkyloovAdminDB',  
+        'USER': 'root',  
+        'PASSWORD': 'superLoov',  
+        'HOST': '127.0.0.1',  
+        'PORT': '3306',
     }
 }
+
 
 
 # Password validation
@@ -178,3 +183,6 @@ CELERY_TIMEZONE = 'Asia/Riyadh'
 
 CELERY_RESULT_BACKEND = "django-db"
 CELERY_CACHE_BACKEND = "django-cache"
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')

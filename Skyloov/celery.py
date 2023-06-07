@@ -15,7 +15,7 @@ app.config_from_object("django.conf:settings", namespace="CELERY")
 app.conf.beat_schedule = {
     "add-every-24-hours":{
         'task': 'send_email',
-        'schedule': crontab(minute='*/1')
+        'schedule': crontab(minute='*/30')
     }
 }
 # Load task modules from all registered Django apps.

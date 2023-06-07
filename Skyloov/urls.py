@@ -22,13 +22,13 @@ from rest_framework_simplejwt.views import (
 from django.urls import re_path
 
 
+
 from django.views.generic import TemplateView
+from django.urls import include
+from django.conf import settings
+from django.conf.urls.static import static
 from drf_spectacular.views import SpectacularAPIView, SpectacularSwaggerView
 from rest_framework.schemas import get_schema_view
-from django.urls import include
-
-
-
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("api/schema", SpectacularAPIView.as_view(), name="schema"),
@@ -38,5 +38,7 @@ urlpatterns = [
     path('api/product/', include('product.urls')),
     path('api/cart/', include("cart.urls")),
     path('api/user/', include("user.urls")),
-
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -1,4 +1,5 @@
 import threading
+import traceback
 from django.shortcuts import render
 from django.db.models import Q
 from rest_framework.decorators import api_view
@@ -24,12 +25,17 @@ def update_product_image(request, product_id):
         return Response({'error': 'Product does not exist.'}, status=status.HTTP_404_NOT_FOUND)
 
     serializer = ProductImageSerializer(data=request.data)
+    base_url = request.build_absolute_uri().split("api")
+    
+
     if serializer.is_valid():
         
         image = serializer.validated_data['image']
         # print(image)
         # import pdb; pdb.set_trace()
         def process_image():
+            # Make accessible URL
+
             # Save original image
             product.image = image
             product.save()
@@ -82,6 +88,7 @@ class ProductSearchView(APIView):
             serializer = ProductSerializer(paginated_products, many=True)
             return paginator.get_paginated_response(serializer.data)
         except Exception as e:
+            traceback.print_exc()
             response_data = {
                 'error': str(e)
             }
